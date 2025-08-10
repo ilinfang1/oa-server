@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.oaoa.demo.dao.EmployeeDao">
+
+    <select id="findEmployeeList" resultType="org.oaoa.demo.model.Employee">
+    SELECT e.*,d.d_name
+    FROM t_emp e
+    LEFT JOIN t_dep d ON e.d_id = d.d_id
+    <where>
+        <if test="e_id != null and e_id != ''">
+            instr (e.e_id, #{e_id}) > 0
+        </if>
+        <if test="e_name != null and e_name != ''">
+            and instr (e.e_name, #{e_name}) > 0
+        </if>
+        <if test="e_sex != null ">
+             and e.e_sex = #{e_sex}
+        </if>
+        <if test="e_birth_start != null ">
+            and e.e_birth &gt;= #{e_birth_start}
+        </if>
+        <if test="e_birth_end != null ">
+            and e.e_birth &lt;= #{e_birth_end}
+        </if>
+        <if test="e_status != null ">
+            and e.e_status = #{e_status}
+        </if>
+        <if test="d_id != null ">
+            and d.d_id = #{d_id}
+        </if>
+    </where>
+    </select>
+
+
+    <delete id="deleteEmp">
+        DELETE FROM t_emp
+        <where>
+            <foreach item="id" index="index" collection="ids" open=" " separator="or" close=" ">
+                e_id = #{id}
+            </foreach>
+        </where>
+    </delete>
+
+    <select id="findExistsUndetermined" resultType="boolean">
+        SELECT COUNT(e_id)
+        FROM t_emp
+        <where>
+            e_status > 0 and
+            <foreach item="id" index="index" collection="ids" open="(" separator="or" close=")">
+                e_id = #{id}
+            </foreach>
+        </where>
+    </select>
+</mapper>
