@@ -62,5 +62,12 @@
             join t_fun c on p.f_id = c.f_pid
         where c.f_ismenu = 1
     </select>
+    
+    <insert id="insertRoleFun">
+        insert into t_rf(ro_id,f_id) values
+        <foreach item="funId"  collection="funIds" separator=",">
+            (#{roleId},#{funId})
+        </foreach>
+    </insert>
 
 </mapper>

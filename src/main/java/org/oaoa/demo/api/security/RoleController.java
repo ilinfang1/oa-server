@@ -12,6 +12,7 @@ import org.oaoa.demo.vo.MenuVo;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RequiredArgsConstructor// 自动注入,针对finall 变量
 @RestController
@@ -57,6 +58,12 @@ public class RoleController {
     public R<List<Integer>> getRoleFunList(@PathVariable Integer roleId){
         List<Integer> funIdList = roleService.getRoleFunList(roleId);
         return R.OK(funIdList);
+    }
+
+    @PutMapping( "/fun")
+    public R<?> execUpdateRoleFunIds(@RequestBody Map<String,Object> map) {
+        roleService.updateRoleFun(map);
+        return R.OK();
     }
 
 

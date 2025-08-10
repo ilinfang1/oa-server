@@ -7,6 +7,7 @@ import org.oaoa.demo.model.Role;
 import org.oaoa.demo.vo.MenuVo;
 
 import java.util.List;
+import java.util.Map;
 
 public interface RoleService {
     PageVo<Role> getRolePage(RoleQueryDto roleQueryDto);
@@ -21,4 +22,6 @@ public interface RoleService {
     List<MenuVo> getFunList();
 
     List<Integer> getRoleFunList(Integer roleId);
+
+    void updateRoleFun(Map<String,Object> map);
 }

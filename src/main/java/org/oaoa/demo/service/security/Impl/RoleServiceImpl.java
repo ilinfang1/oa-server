@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
 
 @RequiredArgsConstructor
 @Service
@@ -79,5 +80,14 @@ public class RoleServiceImpl implements RoleService {
     @Override
     public List<Integer> getRoleFunList(Integer roleId) {
         return roleDao.findRoleFunIdList(roleId);
+    }
+
+    @Override
+    public void updateRoleFun(Map<String, Object> map) {
+        //先删除指定角色下的权限
+        roleDao.deleteRoleFun(map);
+        //再添加指定角色下的权限
+        roleDao.insertRoleFun(map);
+
     }
 }

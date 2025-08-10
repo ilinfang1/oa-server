@@ -10,6 +10,7 @@ import org.oaoa.demo.model.Role;
 import org.oaoa.demo.vo.MenuVo;
 
 import java.util.List;
+import java.util.Map;
 
 @Mapper
 public interface RoleDao {
@@ -32,4 +33,10 @@ public interface RoleDao {
 
     @Select("select f_id  from t_rf where ro_id=#{roleId}")
     List<Integer> findRoleFunIdList(Integer roleId);
+
+    @Delete("delete from t_rf where ro_id= #{roleId}")
+    void deleteRoleFun(Map<String, Object> map);
+
+    void insertRoleFun(Map<String, Object> map);
+
 }
