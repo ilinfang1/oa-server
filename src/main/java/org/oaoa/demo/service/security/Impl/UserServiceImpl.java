@@ -85,8 +85,12 @@ public class UserServiceImpl implements UserService {
     public void updateUserRole(Map<String, Object> map) {
         //先删除指定角色下的权限
         userDao.deleteUserRole(map);
-        //再添加指定角色下的权限
-        userDao.insertUserRole(map);
+        List<Integer> roleIds = (List<Integer>) map.get("roleIds");
+        if (roleIds != null && !roleIds.isEmpty()) {
+            //再添加指定角色下的权限
+            userDao.insertUserRole(map);
+        }
+
 
     }
 }

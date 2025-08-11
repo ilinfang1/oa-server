@@ -17,7 +17,7 @@ public interface UserDao {
 
 
     //自动生成用户账号格式：U00001；
-    @Select("select ifnull(max(convert(substr(u_id,2) using utf8)),0) from t_user where instr(u_id,'U')=1")
+    @Select("select ifnull(max(convert(substr(u_id,2),UNSIGNED)),0) from t_user where instr(u_id,'U')=1")
     int findMaxId();
 
     @Insert("insert into t_user(u_id,u_name,u_pwd) values(#{u_id},#{u_name},'123456')")
@@ -30,7 +30,7 @@ public interface UserDao {
 
     List<Role> findAllRoleList();
 
-    @Select("select ro_id  from t_ir where u_id=#{userId}")
+    @Select("select ro_id  from t_ur where u_id=#{userId}")
     List<Integer> findUserRoleIdList(String userId);
 
     @Delete("delete from t_ur where u_id= #{userId}")

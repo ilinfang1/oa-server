@@ -48,19 +48,19 @@ public class UserController {
         return R.OK();
     }
 
-    @GetMapping( "/fun")
+    @GetMapping( "/role")
     public R<List<Role>> allRoleList(){
         List<Role> menuVoList = userService.getRoleList();
         return R.OK(menuVoList);
     }
 
-    @GetMapping( "/fun/{userId}")
+    @GetMapping( "/role/{userId}")
     public R<List<Integer>> getUserRoleList(@PathVariable String userId){
-        List<Integer> funIdList = userService.getUserRoleList(userId);
-        return R.OK(funIdList);
+        List<Integer> roleIdList = userService.getUserRoleList(userId);
+        return R.OK(roleIdList);
     }
 
-    @PutMapping( "/fun")
+    @PutMapping( "/role")
     public R<?> execUpdateUserRoleIds(@RequestBody Map<String,Object> map) {
         userService.updateUserRole(map);
         return R.OK();
