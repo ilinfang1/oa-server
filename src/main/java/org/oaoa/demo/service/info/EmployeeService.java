@@ -7,6 +7,7 @@ import org.oaoa.demo.model.Dep;
 import org.oaoa.demo.model.Employee;
 
 import java.util.List;
+import java.util.Map;
 
 public interface EmployeeService {
     PageVo<Employee> getEmployeePage(EmpQueryDto empQueryDto);
@@ -19,5 +20,13 @@ public interface EmployeeService {
 
     void removeEmp(String... ids);//可变参数
 
-//    void changeStatus(Integer id, Integer status);
+    void changeStatus(String id, Integer status);
+
+    void createUser(Map<String, String> userIdMap);
+
+
+    void cancelUser(Map<String, String> userIdMap);
+
+    void setLeader(Map<String, String> empIdMap);
+
 }

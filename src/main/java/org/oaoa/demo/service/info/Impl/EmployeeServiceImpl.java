@@ -72,8 +72,35 @@ public class EmployeeServiceImpl implements EmployeeService {
         employeeDao.deleteEmp(ids);
     }
 
-//    @Override
-//    public void changeStatus(Integer id, Integer status) {
-//        employeeDao.updateStatus(id, status);
-//    }
+    @Override
+    public void changeStatus(String id, Integer status) {
+        //如果status为禁用状态，还需进行撤销账号操作和删除领导设置
+        if(InfoStatusEnum.disabled.getCode().equals(status)){
+            Map<String, String> empIdMap = new HashMap<>();
+            empIdMap.put("empId",id);
+            this.cancelUser(empIdMap);//撤销账号
+
+            //删除领导设置
+            employeeDao.deleteLeaderByEmpId(id);
+        }
+        employeeDao.updateStatus(id,status);
+    }
+
+    @Override
+    public void createUser(Map<String, String> userIdMap) {
+        employeeDao.insertUserByEmpId(userIdMap);
+    }
+
+    @Override
+    public void cancelUser(Map<String, String> userIdMap) {
+        employeeDao.deleteUserRoles(userIdMap);
+        employeeDao.deleteUserIdForEmp(userIdMap);
+    }
+
+    @Override
+    public void setLeader(Map<String, String> empIdMap) {
+        employeeDao.deleteLeader(empIdMap);//删除员工所在部门已有领导设置
+        employeeDao.insertLeader(empIdMap);//设置员工为所在部门领导
+    }
+
 }

@@ -5,10 +5,14 @@
 <mapper namespace="org.oaoa.demo.dao.EmployeeDao">
 
     <select id="findEmployeeList" resultType="org.oaoa.demo.model.Employee">
-    SELECT e.*,d.d_name
-    FROM t_emp e
-    LEFT JOIN t_dep d ON e.d_id = d.d_id
-    <where>
+        select
+        e.* , d.d_name,
+        (exists (select u_id from t_user where u_id = e.e_id)) account,
+        (exists (select dep_id,leader_id from t_mgr where dep_id = e.d_id and leader_id = e.e_id) ) leader
+        from t_emp e
+        left join t_dep d on e.d_id = d.d_id
+
+        <where>
         <if test="e_id != null and e_id != ''">
             instr (e.e_id, #{e_id}) > 0
         </if>
