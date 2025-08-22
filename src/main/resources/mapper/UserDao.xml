@@ -7,6 +7,7 @@
     <resultMap id="userResultMap" type="org.oaoa.demo.model.User">
         <id column="u_id" property="u_id" />
         <result column="u_name" property="u_name" />
+        <result column="u_type" property="u_type" />
         <collection property="roleNameList" column="u_id" ofType="String" select="findRoleNameList" >
 
         </collection>
@@ -22,13 +23,19 @@
     
     
     <select id="findUserList" resultMap="userResultMap">
-        select u_id, u_name from t_user
+        select u.u_id, u.u_name,
+            case
+                when instr(u.u_id,'U')=1 and length(u.u_id)=6 then 'normal'
+                when exists(select e_id from t_emp where e_id=u.u_id) then 'emp'
+                else 'inner'
+            end u_type
+        from t_user u
         <where>
             <if test="u_id != null and u_id != ''">
-                instr (u_id, #{u_id}) > 0
+                instr (u.u_id, #{u_id}) > 0
             </if>
             <if test="u_name != null and u_name != ''">
-                and instr (u_name, #{u_name}) > 0
+                and instr (u.u_name, #{u_name}) > 0
             </if>
         </where>
     </select>
@@ -56,5 +63,26 @@
             (#{userId},#{roleId})
         </foreach>
     </insert>
+    <select id="findExistsRoles" resultType="boolean">
+        select
+        count(u_id)
+
+        from t_ur
+
+        where u_id in
+        <foreach item="userId"  collection="userIds" open="(" separator="," close=")">
+            #{userId}
+        </foreach>
+    </select>
+    
+    <select id="findAllNotNormalUsers" resultType="String">
+        select
+        u_id
+        from t_user u
+        where
+            exists(select e_id from t_emp where e_id=u.u_id)
+        or
+            (not (instr(u.u_id,'U')=1 and length(u.u_id)=6))
+    </select>
 
 </mapper>

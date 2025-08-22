@@ -38,4 +38,8 @@ public interface UserDao {
 
     void insertUserRole(Map<String, Object> map);
 
+    boolean findExistsRoles(@Param("userIds") String... ids); // 检查用户是否存在角色关联关系)
+
+    List<String> findAllNotNormalUsers();
+
 }

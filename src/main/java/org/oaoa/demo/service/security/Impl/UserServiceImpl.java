@@ -14,6 +14,7 @@ import org.oaoa.demo.vo.MenuVo;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -58,14 +59,28 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void updateUser(UserDto userDto) {
+
         userDao.updateUser(userDto);
     }
 
     @Override
     public void removeUser(String... ids) {
         if (ids == null || ids.length == 0) {
-            throw new BusinessException("请选择要删除的部门");
+            throw new BusinessException("请选择要删除的员工");
 
+
+        }
+        List<String> userIdList = userDao.findAllNotNormalUsers();
+         boolean has =Arrays.stream(ids).anyMatch(id -> {
+            return userIdList.stream().anyMatch(userId -> userId.equals(id));// anyMatch()方法返回true表示至少有一个元素匹配
+        });
+         if(has){
+             throw new BusinessException("需要删除的用户中存在有一个非普通用户状态，不能删除！！");
+         }
+
+
+        if(userDao.findExistsRoles(ids)){
+            throw new BusinessException("需要删除的用户至少有一个用户已分配角色，不允许删除！！");
         }
 
         userDao.deleteUser(ids);// 调用DAO层的删除方法

@@ -69,6 +69,13 @@ public class RoleServiceImpl implements RoleService {
 
         }
 
+        if(roleDao.findExistsUser(ids)){
+            throw new BusinessException("将要删除的角色中，部分角色已被用户使用，不允许删除！！！");
+        }
+        if(roleDao.findExistsFun(ids)){
+            throw new BusinessException("将要删除的角色中，部分角色已有权限，不允许删除！！！");
+        }
+
         roleDao.deleteRole(ids);// 调用DAO层的删除方法
     }
 

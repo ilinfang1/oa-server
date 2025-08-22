@@ -39,4 +39,9 @@ public interface RoleDao {
 
     void insertRoleFun(Map<String, Object> map);
 
+    boolean findExistsUser(@Param("roleIds") Integer... ids); // 检查角色是否存在用户关联关系
+
+    boolean findExistsFun(@Param("roleIds") Integer... ids);
+
+
 }
